@@ -1,16 +1,17 @@
 class SessionsController < ApplicationController
 
   def new
+    render :new
   end
 
   def create
-    @user = User.find_by_credentials(email: params[:user][:email], password: params[:user][:password])
-    if @user
+    user = User.find_by_credentials(params[:user][:email], params[:user][:password])
+    if user
       flash[:notice] = "You have logged in"
-      login!(@user)
-      redirect_to root_url
+      login!(user)
+      redirect_to user_url(user)
     else
-      flash[:errors] = "User #{@user.email} does not exist"
+      flash[:errors] = "User does not exist"
       render :new
     end
   end
